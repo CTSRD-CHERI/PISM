@@ -56,8 +56,9 @@ CXX = g++-4.8
 
 all: axi_pism
 
-$(PISMDEVDIR)/libpism.so:
-	$(MAKE) -C $(PISMDEVDIR)
+pism: $(PISMDEVDIR)/libpism.so
+
+link-so: $(PISMDEVDIR)/libpism.so
 	ln -s $(PISMDEVDIR)/libpism.so
 	ln -s $(PISMDEVDIR)/dram.so
 	ln -s $(PISMDEVDIR)/ethercap.so
@@ -66,7 +67,10 @@ $(PISMDEVDIR)/libpism.so:
 	ln -s $(PISMDEVDIR)/sdcard.so
 	ln -s $(PISMDEVDIR)/virtio_block.so
 
-axi_pism: $(SRCDIR)/Top_test.bsv $(PISMDEVDIR)/libpism.so
+$(PISMDEVDIR)/libpism.so:
+	$(MAKE) -C $(PISMDEVDIR)
+
+axi_pism: $(SRCDIR)/Top_test.bsv link-so
 	mkdir -p $(OUTPUTDIR)/$@-info $(BDIR) $(SIMDIR)
 	$(BSC) -info-dir $(OUTPUTDIR)/$@-info -simdir $(SIMDIR) $(BSCFLAGS) -sim -g top -u $<
 	CC=$(CC) CXX=$(CXX) $(BSC) -simdir $(SIMDIR) $(BSCFLAGS) -L . -l pism -sim -e top -o $(OUTPUTDIR)/$@
