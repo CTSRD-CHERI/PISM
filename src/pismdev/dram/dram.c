@@ -32,7 +32,7 @@
  *
  * @BERI_LICENSE_HEADER_END@
  */
-#define _BSD_SOURCE
+#define _DEFAULT_SOURCE
 #define _XOPEN_SOURCE 
 #define _GNU_SOURCE
 

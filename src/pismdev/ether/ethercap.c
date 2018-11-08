@@ -95,7 +95,7 @@
  * indention is tab-spaced and even single-statement blocks are surrounded with
  * brackets. Global variables are prefixed with g_.
  */
-#define _BSD_SOURCE
+#define _DEFAULT_SOURCE
 #define _XOPEN_SOURCE 
 
 #include <sys/param.h>
@@ -353,8 +353,7 @@ cheri_net_start(cheri_net_t *chn, const char *iname)
 
 	chn->chn_fd = fd;
 	chn->chn_flags = CHERI_NET_STARTED;
-	snprintf(chn->chn_ifname, sizeof(chn->chn_ifname) - 1, "%s",
-		ifr.ifr_name);
+	snprintf(chn->chn_ifname, sizeof(chn->chn_ifname), "%s", ifr.ifr_name);
 	assert(strcmp(iname, chn->chn_ifname) == 0);
 	error = cheri_net_data_init(&chn->chn_rx, CHERI_NET_DATABUF_SIZE);
 	assert(error == 0 && "no memory");
@@ -381,6 +380,7 @@ cheri_net_poll(cheri_net_t *chnp, int acctype)
 	fd = chnp->chn_fd;
 	pfd.fd = fd;
 	pfd.revents = 0;
+	pfd.events = 0;
 	if (acctype == 1) {
 		/* Read */
 		pfd.events |= POLLIN;
@@ -665,8 +665,7 @@ ethercap_dev_response_ready(pism_device_t *dev)
 static pism_data_t
 ethercap_dev_response_get(pism_device_t *dev)
 {
-	pism_data_t dummy;
-
+	pism_data_t dummy = {0};
 	return (dummy);
 }
 

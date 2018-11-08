@@ -288,11 +288,9 @@ device_start(const char *name)
 static void
 device_finish(void)
 {
-	bool ret;
-
 	assert(curpd != NULL);
 	assert(curmod != NULL);
-	ret = pism_device_options_finalise(curpd);
+	pism_device_options_finalise(curpd);
 	if (curmod->pm_dev_init != NULL)
 		curmod->pm_dev_init(curpd);
 	SLIST_INSERT_HEAD(g_pism_devices[yybusno], curpd, pd_next);
