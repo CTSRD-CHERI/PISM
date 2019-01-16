@@ -253,14 +253,8 @@ function Tuple3#(TLMAddr#(`TLM_PRM), Bit#(32), Bit#(5))
   TLMAddr#(`TLM_PRM) lineAddress = inAddr & lineAddressMask;
   Bit#(5) partOffset = truncate(inAddr & ~lineAddressMask);
   Bit#(32) shiftedBE = unshiftedBE << partOffset;
-  // Force alignment of offset which will be used for write data and byte enables.
-  `ifdef MEM64
-    partOffset[2:0] = 0;
-  `elsif MEM128
-    partOffset[3:0] = 0;
-  `else
-    partOffset = 0;
-  `endif
+  // Force alignment of offset to 128b which will be used for write data and byte enables.
+  partOffset[3:0] = 0;
   return tuple3(lineAddress, shiftedBE, partOffset);
 
 endfunction
@@ -333,14 +327,8 @@ module mkPISMTLM#(PismBus bus)(TLMReadWriteRecvIFC#(`TLM_RR));
       let newTd = td;
       Bit#(TLog#(TDiv#(`DATA_sz, 8))) space = 0;
       newTd.addr = td.addr + zeroExtend({pack(flit),space});
-       // Stash shift amount for read response.
-      `ifdef MEM64
-        resp.data = zeroExtend(newTd.addr[4:3]);
-      `elsif MEM128
-        resp.data = zeroExtend({newTd.addr[4],1'b0});
-      `else
-        resp.data = 0;
-      `endif
+      // Stash shift amount for read response.
+      resp.data = zeroExtend({newTd.addr[4],1'b0});
       req = tagged Descriptor newTd;
     end
     let fail = True;
