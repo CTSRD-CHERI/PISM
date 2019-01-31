@@ -2,11 +2,14 @@
  * Copyright (c) 2011-2012 Philip Paeps
  * Copyright (c) 2011-2012 Robert N. M. Watson
  * Copyright (c) 2011 Jonathan Woodruff
+ * Copyright (c) 2019 Peter Rugg
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
  * Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
- * ("CTSRD"), as part of the DARPA CRASH research programme.
+ * ("CTSRD"), as part of the DARPA CRASH research programme and under DARPA
+ * contract HR0011-18-C-0016 ("ECATS"), as part of the DARPA SSITH research
+ * programme.
  *
  * @BERI_LICENSE_HEADER_START@
  *
@@ -95,9 +98,10 @@ static char	*g_fb_debug = NULL;
 
 #define	FRAMEBUFFER_BASE	(CHERI_FRAMEBUF_BASE)
 #define	FRAMEBUFFER_LENGTH	(FRAMEBUFFER_WIDTH * FRAMEBUFFER_HEIGHT * 2)
+#define	FRAMEBUFFER_CTRL_BASE	(CHERI_FRAMEBUF_CTRL_BASE)
+#define	FRAMEBUFFER_CTRL_LENGTH	(FRAMEBUFFER_CTRL_BASE + CHERI_FRAMEBUF_CTRL_LENGTH)
 #define	TOUCHSCREEN_BASE	(CHERI_TOUCHSCREEN_BASE)
 #define	TOUCHSCREEN_LENGTH	(3 * sizeof(uint32_t))
-
 /*
  * XXXRW: This frame buffer simulation may have non-trivial word/byte order
  * problems.  However, it currently appears to work on 64-bit Intel systems.
@@ -448,10 +452,20 @@ fb_dev_addr_valid(pism_device_t *dev, pism_data_t *req)
 	pd_int = &req->pd_int;
 	if (pd_int->pdi_addr >= FRAMEBUFFER_BASE &&
 	    pd_int->pdi_addr < FRAMEBUFFER_BASE + FRAMEBUFFER_LENGTH)
+           {
 		return (1);
+           }
 	if (pd_int->pdi_addr >= TOUCHSCREEN_BASE &&
 	    pd_int->pdi_addr < TOUCHSCREEN_BASE + TOUCHSCREEN_LENGTH)
+           {
 		return (1);
+           }
+        if (pd_int->pdi_addr >= FRAMEBUFFER_CTRL_BASE &&
+	    pd_int->pdi_addr < FRAMEBUFFER_CTRL_BASE + FRAMEBUFFER_CTRL_LENGTH)
+           {
+                warnx("%s: Request to framebuffer control register, which is not modelled in simulation.", __func__);
+                return (1);
+           }
 	return (0);
 }
 

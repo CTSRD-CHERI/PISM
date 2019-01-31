@@ -1,10 +1,13 @@
 /*-
  * Copyright (c) 2012 Robert N. M. Watson
+ * Copyright (c) 2019 Peter Rugg
  * All rights reserved.
  *
  * This software was developed by SRI International and the University of
  * Cambridge Computer Laboratory under DARPA/AFRL contract FA8750-10-C-0237
- * ("CTSRD"), as part of the DARPA CRASH research programme.
+ * ("CTSRD"), as part of the DARPA CRASH research programme and under DARPA
+ * contract HR0011-18-C-0016 ("ECATS"), as part of the DARPA SSITH research
+ * programme.
  *
  * @BERI_LICENSE_HEADER_START@
  *
@@ -58,7 +61,9 @@
 #define	CHERI_COUNT			0x7f800000
 #define	CHERI_DEBUG_JTAG_UART_BASE	0x7f005000
 #define	CHERI_LEDS			0x7f006000
-#define	CHERI_FRAMEBUF_BASE		0x04000000
+#define	CHERI_FRAMEBUF_BASE		0x70000000
+#define	CHERI_FRAMEBUF_CTRL_BASE	0x70400000
+#define	CHERI_FRAMEBUF_CTRL_LENGTH	0x00000020
 #define	CHERI_TOUCHSCREEN_BASE		0x05000000
 #define	CHERI_COMPOSITOR_BASE		0x7f80d000
 #define	CHERI_COMPOSITOR_MEM_BASE	0x20000000
