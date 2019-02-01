@@ -79,7 +79,7 @@ ifdef "BOOT_MEM" device "bootmem" {
 
 ifdef "TPAD_FRAMEBUFFER" device "framebuffer0" {
 	class framebuffer;
-	addr 0x04000000;
+	addr 0x70000000;
 	length 0x01000020;
 	option lazy "yes";
 }
