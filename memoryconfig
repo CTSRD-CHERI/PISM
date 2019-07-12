@@ -39,8 +39,8 @@ module virtio_block.so
 
 device "dram0" {
 	class dram;
-	addr 0x0;
-	length 0x40000000;
+	addr 0x80200000;
+	length 0x70000000;
 };
 
 ifdef "CHERI_KERNEL" device "kernel" {
@@ -71,7 +71,7 @@ ifndef "CHERI_DTB" device "dtb" {
 ifdef "BOOT_MEM" device "bootmem" {
 	class dram;
 	addr 0x80000000;
-	length 0x10000;
+	length 0x200000;
 	option path "./bootmem.bin";
 	option type "mmap";
 	option cow "no";
